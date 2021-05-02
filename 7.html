@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+	<script>
+		let vasya = { name: "Вася", age: 25, averageMark: 70 };
+		let petya = { name: "Петя", age: 30, averageMark: 100 };
+		let masha = { name: "Маша", age: 28, averageMark: 50 };
+		let users = [ vasya, petya, masha ];
+
+		let name = users.map(item => item.name);
+
+		let abdul = { name: "Абдул", age: 6, averageMark: 0 };
+		users.push(abdul);
+
+		users.forEach(item => {
+			if (item.age >= 18) console.log(item.name);
+		});
+
+		console.log(users.filter(function(item) {
+			if(item.averageMark > 50) return item;
+		}));
+
+		let volodya = { name: "Володя", age: 19, averageMark: 40 };
+
+		users[users.findIndex(item => vasya.name = "Вася")] = volodya;
+
+		console.log(users.find(item => item.name = "Петя"));
+	</script>
+</body>
+</html>
