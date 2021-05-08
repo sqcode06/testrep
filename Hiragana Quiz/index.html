@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Online Hiragana quiz</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap');
+
+		*{
+			margin: 0;
+			padding: 0;
+		}
+
+		html {
+			height: 100%;
+		}
+
+		body {
+			height: 100%;
+			/*background: radial-gradient(#ff6bbd, #ffa8d8);*/
+			background-color: #223;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			font-family: Roboto;
+		}
+
+		h1 {
+			font-weight: 900;
+			font-size: 3em;
+			color: #ff4a00;
+		}
+
+		button {
+			border-radius: 100px;
+			background-color: #ff4a00;
+			border: 0;
+			color: #223;
+			width: 20%;
+			height: 5%;
+			cursor: pointer;
+			font-family: Roboto;
+			font-weight: 500;
+			font-size: 1.6rem;
+			margin-top: 2.5%;
+		}
+
+		.stats {
+			display: grid;
+			width: 60%;
+			height: 60%;
+			grid-template-columns: repeat(3, 33.3333333%);
+			grid-template-rows: repeat(3, 33.3333333%);
+			font-weight: 900;
+			font-size: 2.6em;
+			color: #ff4a00;
+			background-color: #ff4a00;
+			grid-gap: 2px;
+		}
+
+		.grid-element {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background-color: #223;
+		}
+	</style>
+</head>
+<body>
+	<h1 class="hello-h1">QUIZ</h1>
+	<button class="start-button">START</button>
+	<button class="stats-button">STATS</button>
+	<div class="stats" style="display: none">  
+		<div class="grid-element"></div>
+		<div class="grid-element">HIRAGANA</div>
+		<div class="grid-element">KATAKANA</div>
+		<div class="grid-element">BEST SCORE</div>
+		<div class="grid-element">0</div>
+		<div class="grid-element">0</div>
+		<div class="grid-element">TOTAL PLAYED</div>
+		<div class="grid-element">0s</div>
+		<div class="grid-element">0s</div>
+	</div>
+	<button class="back-button" style="display: none">BACK</button>
+	<script>
+		const $hello_h1 = document.querySelector(".hello-h1");
+		const $start_button = document.querySelector(".start-button");
+		const $stats_button = document.querySelector(".stats-button");
+
+		const $stats = document.querySelector(".stats");
+		const $back_button = document.querySelector(".back-button");
+
+		$stats_button.addEventListener('click', () => {
+			turn($hello_h1, 'block');
+			turn($start_button, 'block');
+			turn($stats_button, 'block');
+			turn($stats, 'grid');
+			turn($back_button, 'block');
+		});
+		$back_button.addEventListener('click', () => {
+			turn($hello_h1, 'block');
+			turn($start_button, 'block');
+			turn($stats_button, 'block');
+			turn($stats, 'grid');
+			turn($back_button, 'block');
+		});
+
+		function turn(element, type)
+		{
+			if(element.style.display == 'none')
+				element.style.display = type;
+			else element.style.display = 'none';
+		}
+	</script>
+</body>
+</html>
