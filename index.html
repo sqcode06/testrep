@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Japanese writing quiz</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap');
+		@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@700&display=swap');
+
+		* {
+			margin: 0;
+			padding: 0;
+			user-select: none;
+		}
+
+		html {
+			height: 100%;
+		}
+
+		body {
+			height: 100%;
+			background-color: #223;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			font-family: Roboto;
+		}
+
+		h1 {
+			font-weight: 900;
+			font-size: 3em;
+			color: #ff4a00;
+		}
+
+		button {
+			border-radius: 100px;
+			background-color: #ff4a00;
+			border: 0;
+			color: #223;
+			width: 20%;
+			height: 5%;
+			cursor: pointer;
+			font-family: Roboto;
+			font-weight: 500;
+			font-size: 1.6rem;
+			margin-top: 2.5%;
+		}
+
+		.stats {
+			display: grid;
+			width: 60%;
+			height: 60%;
+			grid-template-columns: repeat(3, 33.3333333%);
+			grid-template-rows: repeat(3, 33.3333333%);
+			font-weight: 900;
+			font-size: 2.6em;
+			color: #ff4a00;
+			background-color: #ff4a00;
+			grid-gap: 2px;
+		}
+
+		.stats-element, .options-element {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background-color: #223;
+		}
+
+		.options {
+			width: 60%;
+			height: 60%;
+			display: grid;
+			grid-template-columns: repeat(8, 12.5%);
+			grid-template-rows: repeat(3, 33.3333333333%);
+			background-color: #ff4a00;
+			color: #ff4a00;
+			font-size: 2em;
+			font-weight: 900;
+			grid-gap: 2px;
+		}
+
+		.options-element:nth-of-type(1), .options-element:nth-of-type(4) {
+			grid-column: 1 / 3;
+		}
+
+		.options-element:nth-of-type(2) {
+			grid-column: 3 / 6;
+		}
+
+		.options-element:nth-of-type(3) {
+			grid-column: 6 / 9;
+		}
+
+		.options-element:nth-of-type(5) {
+			grid-column: 3 / 5;
+		}
+
+		.options-element:nth-of-type(6) {
+			grid-column: 5 / 7;
+		}
+
+		.options-element:nth-of-type(7) {
+			grid-column: 7 / 9;
+		}
+
+		.options-element:nth-of-type(8) {
+			grid-column: 1 / 5;
+		}
+
+		.options-element:nth-of-type(9) {
+			grid-column: 5 / 9;
+		}
+
+		.options-element > button {
+			width: 60%;
+			height: 40%;
+		}
+
+		.radio {
+			width: 70%;
+			height: 70%;
+			cursor: pointer;
+			display: flex;
+			align-items: center;	
+			justify-content: center;
+			border-radius: 20px;
+		}
+
+		.radio-enabled {
+			color: #223;
+			background-color: #ff4a00;
+		}
+
+		.game {
+			display: grid;
+			width: 80%;
+			height: 80%;
+			grid-template-rows: repeat(7, 14.2857142857%);
+			grid-template-columns: repeat(4, 25%);
+			grid-gap: 5px;
+			color: #ff4a00;
+		}
+
+		.game-element {
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+
+		.game-element:first-of-type {
+			grid-area: 1 / 2 / 4 / 4;
+			font-weight: 700;
+			font-family: 'Noto Sans JP';
+			font-size: 10em;
+		}
+
+		.game-element:nth-of-type(2) {
+			grid-area: 4 / 1 / 5 / 3;
+		}
+
+		.game-element:nth-of-type(3) {
+			grid-area: 4 / 3 / 5 / 5;
+		}
+
+		.game-element:nth-of-type(4) {
+			grid-area: 5 / 1 / 6 / 3;
+		}
+
+		.game-element:nth-of-type(5) {
+			grid-area: 5 / 3 / 6 / 5;
+		}
+
+		.game-element:nth-of-type(6) {
+			grid-area: 7 / 2 / 8 / 3;
+			font-size: 3em;
+			font-weight: 900;
+		}
+
+		.game-element:nth-of-type(7) {
+			grid-area: 7 / 3 / 8 / 4;
+			font-size: 3em;
+			font-weight: 900;
+		}
+
+		.answer-button {
+			width: 60%;
+			height: 60%;
+			font-size: 2em;
+			font-weight: 900;
+		}
+	</style>
+</head>
+<body>
+	<h1 class="hello-h1">JAPANESE WRITING QUIZ</h1>
+	<button class="start-button">START</button>
+	<button class="stats-button">STATS</button>
+	<button class="options-button">OPTIONS</button>
+	<div class="stats" style="display: none">  
+		<div class="stats-element"></div>
+		<div class="stats-element">HIRAGANA</div>
+		<div class="stats-element">KATAKANA</div>
+		<div class="stats-element">BEST SCORE</div>
+		<div class="stats-element">0</div>
+		<div class="stats-element">0</div>
+		<div class="stats-element">TOTAL PLAYED</div>
+		<div class="stats-element">0</div>
+		<div class="stats-element">0</div>
+	</div>
+	<button class="back-stats-button" style="display: none">BACK</button>
+	<div class="options" style="display: none">
+		<div class="options-element">MODE</div>
+		<div class="options-element"><div class="radio radio-mode">HIRAGANA</div></div>
+		<div class="options-element"><div class="radio radio-mode">KATAKANA</div></div>
+		<div class="options-element">DIFFICULTY</div>
+		<div class="options-element"><div class="radio radio-difficulty">EASY</div></div>
+		<div class="options-element"><div class="radio radio-difficulty">NORMAL</div></div>
+		<div class="options-element"><div class="radio radio-difficulty">HARD</div></div>
+		<div class="options-element"><button class="reset-settings-button">RESET SETTINGS</button></div>
+		<div class="options-element"><button class="reset-progress-button">RESET PROGRESS</button></div>
+	</div>
+	<div class="game" style="display: none">
+		<div class="game-element">あ</div>
+		<div class="game-element"><button class="answer-button">RA</button></div>
+		<div class="game-element"><button class="answer-button">A</button></div>
+		<div class="game-element"><button class="answer-button">BI</button></div>
+		<div class="game-element"><button class="answer-button">HE</button></div>
+		<div class="game-element">SECONDS LEFT:</div>
+		<div class="game-element timer">00</div>
+	</div>
+	<button class="back-options-button" style="display: none">BACK</button>
+	<script>
+		const $hello_h1 = document.querySelector(".hello-h1");
+		const $start_button = document.querySelector(".start-button");
+		const $stats_button = document.querySelector(".stats-button");
+		const $options_button = document.querySelector(".options-button");
+
+		const $stats = document.querySelector(".stats");
+		const $back_stats_button = document.querySelector(".back-stats-button");
+
+		const $stats_bs_h = $stats.childNodes[9];
+		const $stats_bs_k = $stats.childNodes[11];
+		const $stats_tp_h = $stats.childNodes[15];
+		const $stats_tp_k = $stats.childNodes[17];
+
+		const $options = document.querySelector(".options");
+		const $reset_settings_button = document.querySelector(".reset-settings-button");
+		const $reset_progress_button = document.querySelector(".reset-progress-button");
+		const $back_options_button = document.querySelector(".back-options-button");
+
+		const $main_elements = [{item: $hello_h1, type: 'block'}, {item: $start_button, type: 'block'}, {item: $stats_button, type: 'block'}, {item: $options_button, type: 'block'}];
+		const $stats_elements = [{item: $stats, type: 'grid'}, {item: $back_stats_button, type: 'block'}];
+		const $options_elements = [{item: $options, type: 'grid'}, {item: $back_options_button, type: 'block'}];
+		const $game = {item: document.querySelector('.game'), type: 'grid'};
+		const $answer_buttons = document.querySelectorAll('.answer-button');
+
+		const $timer = document.querySelector('.timer');
+
+		const $radio_mode_nodelist = document.querySelectorAll('.radio-mode');
+		const $radio_difficulty_nodelist = document.querySelectorAll('.radio-difficulty');
+
+		let $best_score = {hiragana: 0, katakana: 0};
+
+		let $total_played = {hiragana: 0, katakana: 0};
+
+		$game_dict_hiragana = [
+			{j: 'あ', r: 'a'},
+			{j: 'か', r: 'ka'},
+			{j: 'さ', r: 'sa'},
+			{j: 'た', r: 'ta'},
+			{j: 'な', r: 'na'},
+			{j: 'は', r: 'ha'},
+			{j: 'ま', r: 'ma'},
+			{j: 'や', r: 'ya'},
+			{j: 'ら', r: 'ra'},
+			{j: 'わ', r: 'wa'},
+			{j: 'が', r: 'ga'},
+			{j: 'ざ', r: 'za'},
+			{j: 'だ', r: 'da'},
+			{j: 'ば', r: 'ba'},
+			{j: 'ぱ', r: 'pa'},
+			{j: 'い', r: 'i'},
+			{j: 'き', r: 'ki'},
+			{j: 'し', r: 'shi'},
+			{j: 'ち', r: 'chi'},
+			{j: 'に', r: 'ni'},
+			{j: 'ひ', r: 'hi'},
+			{j: 'み', r: 'mi'},
+			{j: 'り', r: 'ri'},
+			{j: 'ぎ', r: 'gi'},
+			{j: 'じ', r: 'ji'},
+			{j: 'ぢ', r: 'dji'},
+			{j: 'び', r: 'bi'},
+			{j: 'ぴ', r: 'pi'},
+			{j: 'お', r: 'o'},
+			{j: 'こ', r: 'ko'},
+			{j: 'そ', r: 'so'},
+			{j: 'と', r: 'to'},
+			{j: 'の', r: 'no'},
+			{j: 'ほ', r: 'ho'},
+			{j: 'も', r: 'mo'},
+			{j: 'よ', r: 'yo'},
+			{j: 'ろ', r: 'ro'},
+			{j: 'を', r: 'wo'},
+			{j: 'ご', r: 'go'},
+			{j: 'ぞ', r: 'zo'},
+			{j: 'ど', r: 'do'},
+			{j: 'ぼ', r: 'bo'},
+			{j: 'ぽ', r: 'po'},
+			{j: 'う', r: 'u'},
+			{j: 'く', r: 'ku'},
+			{j: 'す', r: 'su'},
+			{j: 'つ', r: 'tsu'},
+			{j: 'ぬ', r: 'nu'},
+			{j: 'ふ', r: 'fu'},
+			{j: 'む', r: 'mu'},
+			{j: 'ゆ', r: 'yu'},
+			{j: 'る', r: 'ru'},
+			{j: 'ぐ', r: 'gu'},
+			{j: 'ず', r: 'zu'},
+			{j: 'づ', r: 'dzu'},
+			{j: 'ぶ', r: 'bu'},
+			{j: 'ぷ', r: 'pu'},
+			{j: 'え', r: 'e'},
+			{j: 'け', r: 'ke'},
+			{j: 'せ', r: 'se'},
+			{j: 'て', r: 'te'},
+			{j: 'ね', r: 'ne'},
+			{j: 'へ', r: 'he'},
+			{j: 'め', r: 'me'},
+			{j: 'れ', r: 're'},
+			{j: 'げ', r: 'ge'},
+			{j: 'ぜ', r: 'ze'},
+			{j: 'で', r: 'de'},
+			{j: 'べ', r: 'be'},
+			{j: 'ゔ', r: 'v'},
+			{j: 'ん', r: 'n'}
+		];
+
+		let $radio_mode = [];
+		let $radio_difficulty = [];
+
+		$radio_mode_nodelist.forEach((item, index) => $radio_mode[index] = {item: item, enabled: false});
+		$radio_difficulty_nodelist.forEach((item, index) => $radio_difficulty[index] = {item: item, enabled: false});
+
+		window.addEventListener('load', () => {
+			loadStats();
+			loadSettings();
+		});
+
+		onclick($stats_button, () => {
+			$main_elements.forEach(element => switchView(element.item, element.type));
+			$stats_elements.forEach(element => switchView(element.item, element.type));
+		});
+
+		onclick($back_stats_button, () => {
+			$main_elements.forEach(element => switchView(element.item, element.type));
+			$stats_elements.forEach(element => switchView(element.item, element.type));
+		});
+
+		onclick($options_button, () => {
+			$main_elements.forEach(element => switchView(element.item, element.type));
+			$options_elements.forEach(element => switchView(element.item, element.type));
+		});
+
+		onclick($back_options_button, () => {
+			$main_elements.forEach(element => switchView(element.item, element.type));
+			$options_elements.forEach(element => switchView(element.item, element.type));
+		});
+
+		onclick($start_button, () => {
+			$main_elements.forEach(element => switchView(element.item, element.type));
+			switchView($game.item, $game.type);
+			let counter = 0;
+			let correct;
+			let correct_i;
+			let isClicked;
+			while(counter <= 15)
+			{
+				isClicked = false;
+				correct = $game_dict_hiragana[getRandomInt($game_dict_hiragana.length)];
+				$game.item.childNodes[1].innerText = correct.j;
+				correct_i = getRandomInt(3);
+				$answer_buttons[correct_i].innerText = correct.r.toUpperCase();
+				Array.from($answer_buttons).filter((item, index) => index != correct_i).forEach(item => item.innerText = $game_dict_hiragana[getRandomInt($game_dict_hiragana.length)].r.toUpperCase());
+				$answer_buttons.forEach((element, index) => onclick(element, () => {
+					if(!isClicked)
+					{
+						if(index == correct_i) $answer_buttons[correct_i].style.backgroundColor = '#149c2d';
+						else
+						{
+							$answer_buttons[index].style.backgroundColor = '#ad0c00';
+							$answer_buttons[correct_i].style.backgroundColor = '#149c2d';
+						}
+						isClicked = true;
+						$timer.innerText = '--';
+					}
+				}));
+				$timer.innerText = '15';
+				// for(let i = 15; i >= 0; i--)
+				// {
+				// 	if(isClicked)
+				// 	{
+				// 		break;
+				// 	}
+				// 	if(!isClicked)
+				// 	{
+				// 		setTimeout(function(){
+				// 			$timer.innerText = i;
+				// 		}, 1000);
+				// 	}
+				// 	if(i == 0)
+				// 	{
+				// 		$answer_buttons.forEach((element, index) => {
+				// 			if(index == correct_i) element.style.backgroundColor = '#149c2d';
+				// 			else element.style.backgroundColor = '#ad0c00';
+				// 		});
+				// 	}
+				// }
+				let time = 15;
+				setTimeout(function countdown(){
+					time--;
+					if(time >= 0) $timer.innerText = time;
+					if(isClicked) time = -1;
+					if(time > 0) setTimeout(countdown, 1000);
+					if(time == 0) {
+						$answer_buttons.forEach((element, index) => {
+							if(index == correct_i) element.style.backgroundColor = '#149c2d';
+							else element.style.backgroundColor = '#ad0c00';
+						});
+					}
+				}, 1000);
+				counter++;
+			}
+		});
+
+		$radio_mode.forEach(item => {
+			onclick(item.item, () => {
+				$radio_mode.forEach(item1 => item1.enabled = false);
+				$radio_mode.forEach(item1 => item1.item.classList.remove('radio-enabled'));
+				item.item.classList.add('radio-enabled');
+				item.enabled = true;
+				setOptions(item.item.innerText.toLowerCase(), getOptions()[1]);
+			});
+		});
+
+		$radio_difficulty.forEach(item => {
+			onclick(item.item, () => {
+				$radio_difficulty.forEach(item1 => item1.enabled = false);
+				$radio_difficulty.forEach(item1 => item1.item.classList.remove('radio-enabled'));
+				item.item.classList.add('radio-enabled');
+				item.enabled = true;
+				setOptions(getOptions()[0], item.item.innerText.toLowerCase());
+			});
+		});
+
+		onclick($reset_settings_button, () => {
+			$radio_mode.forEach(item => {
+				item.enabled = false;
+				item.item.classList.remove('radio-enabled');
+			});
+			$radio_mode[0].enable = true;
+			$radio_mode[0].item.classList.add('radio-enabled');
+			$radio_difficulty.forEach(item => {
+				item.enabled = false;
+				item.item.classList.remove('radio-enabled');
+			});
+			$radio_difficulty[0].enable = true;
+			$radio_difficulty[0].item.classList.add('radio-enabled');
+			setOptions('hiragana', 'easy');
+		});
+
+		onclick($reset_progress_button, () => {
+			setStats({hiragana: 0, katakana: 0}, {hiragana: 0, katakana: 0});
+			loadStats();
+		});
+
+		function setOptions(mode, difficulty)
+		{
+			localStorage.setItem('mode', mode);
+			localStorage.setItem('difficulty', difficulty);
+		}
+
+		function getOptions()
+		{
+			return [localStorage.getItem('mode'), localStorage.getItem('difficulty')];
+		}
+
+		function loadSettings()
+		{
+			$radio_mode.forEach(item => {
+				item.enabled = false;
+				item.item.classList.remove('radio-enabled');
+			});
+			$radio_difficulty.forEach(item => {
+				item.enabled = false;
+				item.item.classList.remove('radio-enabled');
+			});
+			if(getOptions()[0] != null && getOptions()[1] != null)
+			{
+				$radio_mode.find(element => element.item.innerText.toLowerCase() == getOptions()[0]).enabled = true;
+				$radio_mode.find(element => element.item.innerText.toLowerCase() == getOptions()[0]).item.classList.add('radio-enabled');
+				$radio_difficulty.find(element => element.item.innerText.toLowerCase() == getOptions()[1]).enabled = true;
+				$radio_difficulty.find(element => element.item.innerText.toLowerCase() == getOptions()[1]).item.classList.add('radio-enabled');
+			}
+			else
+			{
+				setOptions('hiragana', 'easy');
+				loadSettings();
+			}
+		}
+
+		function setStats(best_score, total_played)
+		{
+			localStorage.setItem('best-score', JSON.stringify(best_score));
+			localStorage.setItem('total-played', JSON.stringify(total_played));
+		}
+
+		function getStats()
+		{
+			return [JSON.parse(localStorage.getItem('best-score')), JSON.parse(localStorage.getItem('total-played'))];
+		}
+
+		function loadStats()
+		{
+			if(getStats()[0] != null & getStats()[1] != null)
+			{
+				$stats_bs_h.innerText = getStats()[0].hiragana;
+				$stats_bs_k.innerText = getStats()[0].katakana;
+				$stats_tp_h.innerText = getStats()[1].hiragana;
+				$stats_tp_k.innerText = getStats()[1].katakana;
+				$best_score = getStats()[0];
+				$total_played = getStats()[1];
+			}
+			else
+			{
+				setStats({hiragana: 0, katakana: 0}, {hiragana: 0, katakana: 0});
+				loadStats();
+			}
+		}
+
+		function onclick(object, handler)
+		{
+			object.addEventListener('click', handler);
+		}
+
+		function switchView(element, type)
+		{
+			if(element.style.display == 'none') 
+				element.style.display = type;
+			else element.style.display = 'none';
+		}
+
+		function getRandomInt(max)
+		{
+		  return Math.floor(Math.random() * max);
+		}
+	</script>
+	<script href="game.js"></script>
+</body>
+</html>
