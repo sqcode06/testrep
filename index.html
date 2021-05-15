@@ -227,7 +227,7 @@
 		<div class="game-element"><button class="answer-button">BI</button></div>
 		<div class="game-element"><button class="answer-button">HE</button></div>
 		<div class="game-element">SECONDS LEFT:</div>
-		<div class="game-element timer">00</div>
+		<div class="game-element timer">--</div>
 	</div>
 	<button class="back-options-button" style="display: none">BACK</button>
 	<script>
@@ -334,7 +334,6 @@
 			{j: 'ぜ', r: 'ze'},
 			{j: 'で', r: 'de'},
 			{j: 'べ', r: 'be'},
-			{j: 'ゔ', r: 'v'},
 			{j: 'ん', r: 'n'}
 		];
 
@@ -369,71 +368,155 @@
 			$options_elements.forEach(element => switchView(element.item, element.type));
 		});
 
+		let counter = 15;
 		onclick($start_button, () => {
 			$main_elements.forEach(element => switchView(element.item, element.type));
 			switchView($game.item, $game.type);
-			let counter = 0;
-			let correct;
-			let correct_i;
-			let isClicked;
-			while(counter <= 15)
-			{
-				isClicked = false;
-				correct = $game_dict_hiragana[getRandomInt($game_dict_hiragana.length)];
-				$game.item.childNodes[1].innerText = correct.j;
-				correct_i = getRandomInt(3);
-				$answer_buttons[correct_i].innerText = correct.r.toUpperCase();
-				Array.from($answer_buttons).filter((item, index) => index != correct_i).forEach(item => item.innerText = $game_dict_hiragana[getRandomInt($game_dict_hiragana.length)].r.toUpperCase());
-				$answer_buttons.forEach((element, index) => onclick(element, () => {
-					if(!isClicked)
+			// while(counter <= 15)
+			// {
+			// 	isClicked = false;
+			// 	correct = $game_dict_hiragana[getRandomInt($game_dict_hiragana.length)];
+			// 	$game.item.childNodes[1].innerText = correct.j;
+			// 	correct_i = getRandomInt(3);
+			// 	$answer_buttons[correct_i].innerText = correct.r.toUpperCase();
+			// 	Array.from($answer_buttons).filter((item, index) => index != correct_i).forEach(item => item.innerText = $game_dict_hiragana[getRandomInt($game_dict_hiragana.length)].r.toUpperCase());
+			// 	$answer_buttons.forEach((element, index) => onclick(element, () => {
+			// 		if(!isClicked)
+			// 		{
+			// 			if(index == correct_i) $answer_buttons[correct_i].style.backgroundColor = '#149c2d';
+			// 			else
+			// 			{
+			// 				$answer_buttons[index].style.backgroundColor = '#ad0c00';
+			// 				$answer_buttons[correct_i].style.backgroundColor = '#149c2d';
+			// 			}
+			// 			isClicked = true;
+			// 			$timer.innerText = '--';
+			// 		}
+			// 	}));
+			// 	$timer.innerText = '15';
+			// 	let time = 15;
+			// 	countdownFinished = false;
+			// 	let qwe = setInterval(function countdown(){
+			// 		time--;
+			// 		if(time >= 0 && $timer.innerText != '--') $timer.innerText = time;
+			// 		if(isClicked) time = -1; countdownFinished = true;
+			// 		/*if(time > 0) setTimeout(countdown, 1000);*/
+			// 		if(time == 0) {
+			// 			$answer_buttons.forEach((element, index) => {
+			// 				if(index == correct_i) element.style.backgroundColor = '#149c2d';
+			// 				else element.style.backgroundColor = '#ad0c00';
+			// 				counter++;
+			// 				clearInterval(qwe);
+			// 			});
+			// 		}
+			// 		if(time == -1) 
+			// 		{
+			// 			counter++;
+			// 			clearInterval(qwe);
+			// 		}
+			// 	}, 1000);
+			// 	// if(countdownFinished) ;
+			// }
+			let correct_index, clickIndex = -1;
+			$answer_buttons.forEach((element, index) => onclick(element, () => clickIndex = index));
+			correct_index = generateAnswers();
+			let interval = setInterval(function(){
+				//correct_index = checkAnswers(correct_index, interval);
+				$answer_buttons.forEach(element => {
+					element.style.backgroundColor = '#ff4a00';
+				});
+				if(clickIndex != -1)
+				{
+					$answer_buttons.forEach(element => {
+						element.style.backgroundColor = '#ff4a00';
+					 	element.style.pointerEvents = 'none';
+					});
+					if(clickIndex == correct_index) $answer_buttons[correct_index].style.backgroundColor = '#149c2d';
+					else
 					{
-						if(index == correct_i) $answer_buttons[correct_i].style.backgroundColor = '#149c2d';
-						else
-						{
-							$answer_buttons[index].style.backgroundColor = '#ad0c00';
-							$answer_buttons[correct_i].style.backgroundColor = '#149c2d';
-						}
-						isClicked = true;
-						$timer.innerText = '--';
+						$answer_buttons[clickIndex].style.backgroundColor = '#ad0c00';
+						$answer_buttons[correct_index].style.backgroundColor = '#149c2d';
 					}
-				}));
-				$timer.innerText = '15';
-				// for(let i = 15; i >= 0; i--)
-				// {
-				// 	if(isClicked)
-				// 	{
-				// 		break;
-				// 	}
-				// 	if(!isClicked)
-				// 	{
-				// 		setTimeout(function(){
-				// 			$timer.innerText = i;
-				// 		}, 1000);
-				// 	}
-				// 	if(i == 0)
-				// 	{
-				// 		$answer_buttons.forEach((element, index) => {
-				// 			if(index == correct_i) element.style.backgroundColor = '#149c2d';
-				// 			else element.style.backgroundColor = '#ad0c00';
-				// 		});
-				// 	}
-				// }
-				let time = 15;
-				setTimeout(function countdown(){
-					time--;
-					if(time >= 0) $timer.innerText = time;
-					if(isClicked) time = -1;
-					if(time > 0) setTimeout(countdown, 1000);
-					if(time == 0) {
-						$answer_buttons.forEach((element, index) => {
-							if(index == correct_i) element.style.backgroundColor = '#149c2d';
-							else element.style.backgroundColor = '#ad0c00';
-						});
-					}
-				}, 1000);
-				counter++;
-			}
+					$timer.innerText = '--';
+					clickIndex = -1;
+					setTimeout(function(){
+						counter = 15;
+						correct_index = generateAnswers();
+					}, 1000);
+				}
+				if(counter == 0)
+				{
+					correct_index = timeOut(correct_index, counter);
+				}
+				$timer.innerText = counter;
+				counter--;
+			}, 1000);
 		});
+
+		function generateAnswers()
+		{
+			let correct = $game_dict_hiragana[getRandomInt($game_dict_hiragana.length)];
+			$game.item.childNodes[1].innerText = correct.j;
+			let correct_i = getRandomInt(3);
+			$answer_buttons[correct_i].innerText = correct.r.toUpperCase();
+			Array.from($answer_buttons).filter((item, index) => index != correct_i).forEach(item => item.innerText = $game_dict_hiragana[getRandomInt($game_dict_hiragana.length)].r.toUpperCase());
+			$answer_buttons.forEach(element => element.style.pointerEvents = 'all');
+			return correct_i;
+		}
+
+		// function checkAnswers(correct_i, interval)
+		// {
+		// 	$answer_buttons.forEach((element, index) => onclick(element, answerClick(element, index, correct_i));
+		// 	return correct_i;
+		// }
+
+		// function answerClick(element, index, correct_i)
+		// {
+		// 	let newAnswer;
+		// 	element.style.backgroundColor = '#ff4a00';
+		// 	if(index == correct_i) $answer_buttons[correct_i].style.backgroundColor = '#149c2d';
+		// 	else
+		// 	{
+		// 		$answer_buttons[index].style.backgroundColor = '#ad0c00';
+		// 		$answer_buttons[correct_i].style.backgroundColor = '#149c2d';
+		// 	}
+		// 	element.style.pointerEvents = 'none'
+		// 	$timer.innerText = '--';
+		// 	setTimeout(function(){
+		// 		counter = 15;
+		// 		newAnswer = generateAnswers();
+		// 	}, 1000);
+		// 	return newAnswer;
+		// }
+
+		function timeOut(correct_i)
+		{
+			let newAnswer;
+			$answer_buttons.forEach((element, index) => {
+				element.style.backgroundColor = '#ff4a00';
+				if(index == correct_i) element.style.backgroundColor = '#149c2d';
+				else element.style.backgroundColor = '#ad0c00';
+			});
+			setTimeout(function(){
+				counter = 15;
+				newAnswer = generateAnswers();
+			}, 1000);
+			return newAnswer;
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 		$radio_mode.forEach(item => {
 			onclick(item.item, () => {
