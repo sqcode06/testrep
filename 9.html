@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>9</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;900&display=swap');
+		* {
+			margin: 0;
+			padding: 0;
+		}
+
+		html, body {
+			height: 100%;
+			background-color: #223;
+		}
+
+		.wrapper {
+			width: 100%;
+			height: 90%;
+			display: grid;
+			grid-template-rows: repeat(2, 50%);
+			grid-template-columns: repeat(5, 1fr);
+			grid-gap: 10px;
+		}
+
+		.buttons {
+			height: 10%;
+			width: 100%;
+			display: flex;
+			align-items: center;
+			justify-content: space-around;
+		}
+
+		button {
+			background-color: #ff4a00;
+			color: #223;
+			border: none;
+			border-radius: 50px;
+			font-family: 'Roboto';
+			font-size: 1.5em;
+			font-weight: 500;
+			width: 20%;
+			height: 50%;
+			cursor: pointer;
+		}
+
+		.child {
+			border: 3px solid #ff4a00;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			font-family: 'Roboto';
+			font-weight: 900;
+			font-size: 1.4em;
+			color: #ff4a00;
+		}
+	</style>
+</head>
+<body>
+	<div class="wrapper">
+		<div class="child"></div>
+		<div class="child"></div>
+		<div class="child"></div>
+		<div class="child"></div>
+		<div class="child"></div>
+		<div class="child"></div>
+		<div class="child"></div>
+		<div class="child"></div>
+		<div class="child"></div>
+		<div class="child"></div>
+	</div>
+	<div class="buttons">
+		<button>Previous</button>
+		<button>Next</button>
+	</div>
+	<script>
+		const outputs = document.querySelectorAll('.child');
+		const buttons = document.querySelectorAll('button');
+
+		buttons[0].hidden = true;
+
+		var request = fetch('https://swapi.dev/api/people/', {method: 'GET'});
+		var result;
+		request.then(res => res.json()).then(res => {result = res; setOutputs()});
+
+		function setOutputs()
+		{
+			outputs.forEach((element, index) => {
+				if(result.results[index] != undefined) element.innerText = `${result.results[index].name}\nBirth year: ${result.results[index].birth_year}\nGender: ${result.results[index].gender}\nMass: ${result.results[index].mass}\nHeight: ${result.results[index].height}`;
+				else element.innerText = "";
+			});
+		}
+
+		buttons[0].addEventListener('click', () => {
+			request = fetch(result.previous, {method: 'GET'});
+			request.then(res => res.json()).then(res => {
+				result = res;
+				if(result.next != null) buttons[1].hidden = false;
+				if(result.previous == null) buttons[0].hidden = true;
+				setOutputs();
+			});
+		});
+
+		buttons[1].addEventListener('click', () => {
+			request = fetch(result.next, {method: 'GET'});
+			request.then(res => res.json()).then(res => {
+				result = res;
+				buttons[0].hidden = false;
+				if(result.next == null) buttons[1].hidden = true;
+				setOutputs();
+			});
+		});
+	</script>
+</body>
+</html>
